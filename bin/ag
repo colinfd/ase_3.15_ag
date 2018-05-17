@@ -1,0 +1,21 @@
+#!/usr/bin/env python
+from ase.io import read
+import os
+import sys
+from ase.io.pickletrajectory import write_trajectory
+import tempfile
+
+cmd = sys.path[0] + '/ag_old '
+
+for i,item in enumerate(sys.argv[1:]):
+    if item.endswith('.traj'):
+        atoms = read(item,index=':')
+        temp_fname = '.%i.traj'%i
+        fd, temp_fname = tempfile.mkstemp('.traj','ase-')
+	write_trajectory(temp_fname,atoms)
+	    
+        cmd += '%s '%temp_fname
+    else:
+        cmd += '%s '%item
+
+os.system(cmd)
